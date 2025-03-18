@@ -8,17 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var websocketManager = WebSocketManager(serverIP: "192.168.1.39") // Default IP
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ZStack {
+            GeometryReader { geometry in
+                GamepadView(websocketManager: websocketManager)
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+            }
         }
-        .padding()
+        .preferredColorScheme(.dark)
+        
     }
 }
 
-#Preview {
-    ContentView()
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }
