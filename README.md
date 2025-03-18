@@ -2,6 +2,10 @@
 
 A mobile app for iPhone that connects to the Virtual Gamepad WebSocket Server, allowing you to use your iPhone as a gamepad controller for your Windows PC.
 
+## Screenshots
+![Screenshot of a gamepad view](https://files.artchsh.kz/uploads/IMG_9707.PNG)
+![Screenshot of a settings view](https://files.artchsh.kz/uploads/IMG_9708.PNG)
+
 ## Features
 
 - Uses WebSockets to communicate with the server
