@@ -23,19 +23,17 @@ struct GamepadButton: View {
     
     var body: some View {
         Circle()
-            .fill(isPressed ? Color.white : color.opacity(0.7))
+            .fill(isPressed ? Color.white : Color.black.opacity(0.5))
             .overlay(
                 Circle()
-                    .stroke(Color.white, lineWidth: 2)
+                    .stroke(Color.gray, lineWidth: 2)
             )
             .overlay(
                 Text(label)
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundColor(isPressed ? color : .white)
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundColor(isPressed ? Color.black : Color.white)
             )
             .frame(width: 70, height: 70)
-            .scaleEffect(isPressed ? 0.9 : 1.0)
-            .animation(.spring(response: 0.2), value: isPressed)
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { _ in

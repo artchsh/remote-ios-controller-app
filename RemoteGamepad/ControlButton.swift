@@ -8,10 +8,18 @@
 import SwiftUI
 
 struct ControlButton: View {
-    let label: String
+    let label: String?
+    let systemImage: String?
     let buttonName: String
     @ObservedObject var websocketManager: WebSocketManager
     @State private var isPressed = false
+    
+    init(label: String? = nil, systemImage: String? = nil, buttonName: String, websocketManager: WebSocketManager) {
+        self.label = label
+        self.systemImage = systemImage
+        self.buttonName = buttonName
+        self.websocketManager = websocketManager
+    }
     
     var body: some View {
         Capsule()
@@ -22,9 +30,17 @@ struct ControlButton: View {
                     .stroke(Color.gray, lineWidth: 2)
             )
             .overlay(
-                Text(label)
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(isPressed ? Color.black : Color.white)
+                Group {
+                    if let label = label {
+                        Text(label)
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(isPressed ? Color.black : Color.white)
+                    } else if let systemImage = systemImage {
+                        Image(systemName: systemImage)
+                            .font(.system(size: 20))
+                            .foregroundColor(isPressed ? Color.black : Color.white)
+                    }
+                }
             )
             .gesture(
                 DragGesture(minimumDistance: 0)

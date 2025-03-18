@@ -38,7 +38,7 @@ struct DPadView: View {
     
     private func dpadButton(_ direction: String) -> some View {
         let isActive = activeDirection == direction
-        
+
         return Rectangle()
             .fill(isActive ? Color.white : Color.gray.opacity(0))
             .frame(width: 50, height: 50)
@@ -47,17 +47,31 @@ struct DPadView: View {
                     .font(.system(size: 20, weight: .bold))
                     .foregroundColor(isActive ? Color.black : Color.white)
             )
+            // Scale up a bit when pressed to simulate a real button press
+            .scaleEffect(isActive ? 1.15 : 1.0)
+            // Add a slight shadow for extra feedback when active
+            .shadow(color: isActive ? Color.black.opacity(0.2) : Color.clear, radius: 4, x: 0, y: 2)
+            // Smooth animation for state transitions
+            .animation(.spring(response: 0.15, dampingFraction: 0.6, blendDuration: 0), value: activeDirection)
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { _ in
-                        activeDirection = direction
-                        websocketManager.sendButtonCommand(
-                            button: direction,
-                            action: "press"
-                        )
+                        if activeDirection != direction {
+                            withAnimation {
+                                activeDirection = direction
+                            }
+                            let generator = UIImpactFeedbackGenerator(style: .light)
+                            generator.impactOccurred()
+                            websocketManager.sendButtonCommand(
+                                button: direction,
+                                action: "press"
+                            )
+                        }
                     }
                     .onEnded { _ in
-                        activeDirection = nil
+                        withAnimation {
+                            activeDirection = nil
+                        }
                         websocketManager.sendButtonCommand(
                             button: direction,
                             action: "release"
@@ -65,6 +79,7 @@ struct DPadView: View {
                     }
             )
     }
+
     
     private func arrowName(for direction: String) -> String {
         switch direction {

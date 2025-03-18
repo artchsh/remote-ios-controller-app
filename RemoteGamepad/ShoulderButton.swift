@@ -29,6 +29,8 @@ struct ShoulderButton: View {
                 DragGesture(minimumDistance: 0)
                     .onChanged { _ in
                         isPressed = true
+                        let generator = UIImpactFeedbackGenerator(style: .light)
+                        generator.impactOccurred()
                         websocketManager.sendButtonCommand(
                             button: buttonName,
                             action: "press"

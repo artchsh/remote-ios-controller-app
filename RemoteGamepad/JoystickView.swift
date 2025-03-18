@@ -14,25 +14,23 @@ struct JoystickView: View {
         ZStack {
             joystickBackground
             joystickThumb
-            // Button offset based on stick type
             GamepadButton(
                 label: stickType == "left" ? "LS" : "RS",
                 buttonName: stickType == "right" ? "ls" : "rs",
                 websocketManager: websocketManager
             )
             .offset(x: stickType == "left" ? (outerCircleSize / 2) : -(outerCircleSize / 2),
-                    y: -outerCircleSize / 2 + -25) // Positioned on top side
+                    y: -outerCircleSize / 2 + -25)
         }
         .frame(width: outerCircleSize, height: outerCircleSize)
+        .gesture(dragGesture) // Gesture added to the entire ZStack
     }
     
     private var joystickBackground: some View {
         Circle()
             .fill(Color.black.opacity(0.5))
             .frame(width: outerCircleSize, height: outerCircleSize)
-            .overlay(
-                Circle().stroke(Color.white, lineWidth: 2)
-            )
+            .overlay(Circle().stroke(Color.gray, lineWidth: 2))
     }
     
     private var joystickThumb: some View {
@@ -41,31 +39,33 @@ struct JoystickView: View {
             .frame(width: innerCircleSize, height: innerCircleSize)
             .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 2)
             .offset(x: position.x, y: position.y)
-            .gesture(dragGesture)
     }
     
     private var dragGesture: some Gesture {
         DragGesture()
             .onChanged { value in
-                if !isDragging {
-                    isDragging = true
-                    let generator = UIImpactFeedbackGenerator(style: .light)
-                    generator.impactOccurred()
-                }
-                
-                let translation = value.translation
-                let distance = hypot(translation.width, translation.height)
+                let center = CGPoint(x: outerCircleSize/2, y: outerCircleSize/2)
+                let location = value.location
+                let deltaX = location.x - center.x
+                let deltaY = location.y - center.y
+                let distance = hypot(deltaX, deltaY)
                 
                 if distance > maxDistance {
                     let scale = maxDistance / distance
-                    position = CGPoint(x: translation.width * scale, y: translation.height * scale)
+                    position = CGPoint(x: deltaX * scale, y: deltaY * scale)
                 } else {
-                    position = CGPoint(x: translation.width, y: translation.height)
+                    position = CGPoint(x: deltaX, y: deltaY)
                 }
                 
                 let xValue = Int((position.x / maxDistance) * 32767)
                 let yValue = Int((position.y / maxDistance) * 32767)
                 websocketManager.sendJoystickCommand(stick: stickType, x: xValue, y: yValue)
+                
+                if !isDragging {
+                    isDragging = true
+                    let generator = UIImpactFeedbackGenerator(style: .light)
+                    generator.impactOccurred()
+                }
             }
             .onEnded { _ in
                 isDragging = false

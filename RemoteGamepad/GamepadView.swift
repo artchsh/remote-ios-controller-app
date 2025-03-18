@@ -7,10 +7,8 @@ struct GamepadView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                Color(red: 0.545, green: 0, blue: 0)
+                Color(red: 0.1, green: 0.1, blue: 0.1)
                     .edgesIgnoringSafeArea(.all)
-                
-                
 
                 VStack {
                     // Status Bar
@@ -25,9 +23,9 @@ struct GamepadView: View {
 
                         // Bottom Control Buttons
                         HStack(spacing: 20) {
-                            ControlButton(label: "Back", buttonName: "back", websocketManager: websocketManager)
-                            ControlButton(label: "Home", buttonName: "home", websocketManager: websocketManager)
-                            ControlButton(label: "Start", buttonName: "start", websocketManager: websocketManager)
+                            ControlButton(systemImage: "rectangle.on.rectangle", buttonName: "back", websocketManager: websocketManager)
+                            ControlButton(systemImage: "gamecontroller.fill", buttonName: "home", websocketManager: websocketManager)
+                            ControlButton(systemImage: "line.3.horizontal", buttonName: "start", websocketManager: websocketManager)
                         }
 
                         Spacer()
@@ -76,13 +74,13 @@ struct GamepadView: View {
 
                         ZStack {
                             VStack(spacing: 45) {
-                                GamepadButton(label: "Y", buttonName: "y", websocketManager: websocketManager)
-                                GamepadButton(label: "A", buttonName: "a", websocketManager: websocketManager)
+                                ShoulderButton(label: "Y", buttonName: "y", websocketManager: websocketManager)
+                                ShoulderButton(label: "A", buttonName: "a", websocketManager: websocketManager)
                             }
 
                             HStack(spacing: 45) {
-                                GamepadButton(label: "X", buttonName: "x", websocketManager: websocketManager)
-                                GamepadButton(label: "B", buttonName: "b", websocketManager: websocketManager)
+                                ShoulderButton(label: "X", buttonName: "x", websocketManager: websocketManager)
+                                ShoulderButton(label: "B", buttonName: "b", websocketManager: websocketManager)
                             }
                         }
                         .frame(width: 170, height: 170)

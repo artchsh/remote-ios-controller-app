@@ -12,13 +12,13 @@ struct SettingsView: View {
     @State private var tempServerIP: String = ""
     @State private var tempPort: String = ""
     @Environment(\.presentationMode) var presentationMode
-    
+
     init(websocketManager: WebSocketManager) {
         self.websocketManager = websocketManager
         _tempServerIP = State(initialValue: websocketManager.serverIP)
         _tempPort = State(initialValue: String(websocketManager.port))
     }
-    
+
     var body: some View {
         NavigationView {
             Form {
@@ -27,11 +27,11 @@ struct SettingsView: View {
                         .keyboardType(.asciiCapable)
                         .disableAutocorrection(true)
                         .autocapitalization(.none)
-                    
+
                     TextField("Port", text: $tempPort)
                         .keyboardType(.numberPad)
                 }
-                
+
                 Section(header: Text("Connection")) {
                     Button(action: {
                         saveSettings()
@@ -49,7 +49,7 @@ struct SettingsView: View {
                     }
                     .foregroundColor(websocketManager.isConnected ? .red : .blue)
                 }
-                
+
                 Section(header: Text("About")) {
                     HStack {
                         Text("Status")
@@ -65,7 +65,7 @@ struct SettingsView: View {
                                 .foregroundColor(.red)
                         }
                     }
-                    
+
                     if let error = websocketManager.connectionError {
                         HStack {
                             Text("Error")
@@ -82,16 +82,18 @@ struct SettingsView: View {
             .navigationBarItems(
                 trailing: Button("Save") {
                     saveSettings()
+                    presentationMode.wrappedValue.dismiss() // Dismiss the view
                 }
             )
         }
     }
-    
+
     private func saveSettings() {
         if let port = Int(tempPort), port > 0 && port <= 65535 {
             websocketManager.port = port
         }
-        
+
         websocketManager.serverIP = tempServerIP
+        UserDefaults.standard.set(tempServerIP, forKey: "serverIP") // Save IP to UserDefaults
     }
 }
