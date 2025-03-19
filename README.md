@@ -21,21 +21,6 @@ A mobile app for iPhone that connects to the Virtual Gamepad WebSocket Server, a
 - iPhone device (optimized for iPhone)
 - [Virtual Gamepad WebSocket Server](https://github.com/artchsh/remote-ios-controller-server) running on a Windows PC
 
-## Installation
-
-### Option 1: Sideloading with AltStore
-
-1. Install [AltStore](https://altstore.io/) on your computer and set it up with your device
-2. Download the IPA file from the [Releases](../../releases) tab
-3. Open the IPA file with AltStore to install it on your device
-
-### Option 2: Sideloading with Sideloadly
-
-1. Install [Sideloadly](https://sideloadly.io/) on your computer
-2. Connect your iPhone to your computer
-3. Download the IPA file from the [Releases](../../releases) tab
-4. Drag and drop the IPA into Sideloadly and follow the installation instructions
-
 ## Usage
 
 1. Make sure the [Virtual Gamepad WebSocket Server](https://github.com/artchsh/remote-ios-controller-server) is running on your Windows PC
